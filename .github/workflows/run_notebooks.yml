@@ -1,0 +1,32 @@
+name: Run Jupyter Notebooks
+
+on:
+  push:
+    branches:
+      - main  # Pokreće se kada se promene na glavnoj grani
+  pull_request:
+    branches:
+      - main  # Pokreće se kada se napravi pull request
+
+jobs:
+  run_notebooks:
+    runs-on: ubuntu-latest  # Odabir okruženja za pokretanje
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # Klonira repozitorijum
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Verzija Pythona koju želiš
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Instalira sve zavisnosti
+
+      - name: Run Jupyter notebooks
+        run: |
+          pip install nbconvert  # Instalira nbconvert ako nije već
+          jupyter nbconvert --to notebook --execute --inplace *.ipynb  # Pokreće sve notebook-ove u repozitorijumu
